@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title>Bootstrap Table</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.min.css" rel="stylesheet">
+
+    <!-- Favicons -->
+    <link rel="icon" href="favicon.ico">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="javascript:void(0)">PushPros</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="javascript:void(0)">Sign out</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <main role="main" class="col-md-9 col-lg-10 px-4">
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Sample Table</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button id="load_data" type="button" class="btn btn-sm btn-outline-secondary">Load Data</button>
+                        <button id="loading_data" class="btn btn-sm btn-outline-secondary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="jquery-3.5.0.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+    <script>
+        $("button#loading_data").hide();
+        $("button#load_data").click(function () {
+            $("table tbody").html("");
+            $(this).hide();
+            $("button#loading_data").show();
+            var cols = ["id", "name", "url"]; // You can add more required columns here
+
+            // calling the api
+            $.get("https://aimtell.com/files/sites.json", function (data) {
+                $.each(data.sites, function (key, value) {
+
+                    // building table rows
+                    var row = "<tr>"
+                    $.each(cols, function (k, v) {
+                        row += "<td>" + value[v] + "</td>"
+                    });
+                    row += "</tr>";
+
+                    // appending the rows to table
+                    $("table tbody").append(row);
+                });
+
+            })
+            .fail(function () {
+                alert("There is an issue with your request.");
+            })
+            .done(function () {
+                // loading button spinner
+                $("button#loading_data").hide();
+                $("button#load_data").show();
+            });
+        });
+    </script>
+</body>
+
+</html>
